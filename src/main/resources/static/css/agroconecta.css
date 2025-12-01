@@ -1,0 +1,201 @@
+/* --- AGROCONECTA PREMIUM STYLES --- */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
+
+:root {
+    --primary: #2e7d32;
+    --primary-dark: #1b5e20;
+    --primary-light: #4caf50;
+    --accent: #ffb300;
+    --accent-hover: #ffca28;
+    --text-dark: #1a1a1a;
+    --text-light: #555;
+    --bg-light: #f4f7f4;
+    --white: #ffffff;
+    --glass: rgba(255, 255, 255, 0.95);
+    --shadow-soft: 0 10px 30px rgba(0,0,0,0.05);
+    --shadow-hover: 0 20px 40px rgba(46, 125, 50, 0.15);
+    --radius: 16px;
+    --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4 { font-family: 'Playfair Display', serif; color: var(--primary-dark); }
+
+/* --- HEADER & NAV --- */
+.header {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+    color: var(--white);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--white);
+    text-decoration: none;
+}
+
+/* --- COMPONENTS --- */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.card-agro {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid rgba(0,0,0,0.03);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.card-agro:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--primary-light);
+}
+
+/* --- BUTTONS --- */
+.btn-agro {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    background: linear-gradient(45deg, var(--primary), var(--primary-light));
+    color: var(--white);
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 4px 15px rgba(46, 125, 50, 0.2);
+}
+
+.btn-agro:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(46, 125, 50, 0.3);
+}
+
+.btn-secondary {
+    background: linear-gradient(45deg, var(--accent), var(--accent-hover));
+    color: var(--text-dark);
+    box-shadow: 0 4px 15px rgba(255, 179, 0, 0.2);
+}
+
+.btn-danger {
+    background: linear-gradient(45deg, #d32f2f, #ef5350);
+    box-shadow: 0 4px 15px rgba(211, 47, 47, 0.2);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--white);
+    box-shadow: none;
+}
+.btn-outline:hover { background: var(--white); color: var(--primary); }
+
+/* --- FORMS --- */
+.form-control {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    transition: var(--transition);
+    background: #fafafa;
+    margin-bottom: 1rem;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: var(--white);
+    box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.1);
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--primary-dark);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* --- TABLES --- */
+.table-container {
+    overflow-x: auto;
+    border-radius: var(--radius);
+    background: var(--white);
+    box-shadow: var(--shadow-soft);
+}
+
+.table-agro {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+
+.table-agro th {
+    background: var(--primary);
+    color: var(--white);
+    padding: 1.2rem;
+    text-align: left;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+}
+
+.table-agro td {
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid #f0f0f0;
+    color: var(--text-light);
+}
+
+.table-agro tr:last-child td { border-bottom: none; }
+.table-agro tr:hover { background-color: #f9fbe7; }
+
+/* --- ANIMATIONS --- */
+.animate-entry {
+    animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    opacity: 0;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- FOOTER --- */
+.footer {
+    background: var(--text-dark);
+    color: var(--white);
+    padding: 4rem 2rem 2rem;
+    margin-top: auto;
+}

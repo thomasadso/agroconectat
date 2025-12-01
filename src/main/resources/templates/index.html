@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>AgroConecta - El Renacer del Campo</title>
+    <link rel="stylesheet" th:href="@{/css/agroconecta.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Estilos específicos para el Mega Footer */
+        .footer-links h4 { color: var(--accent); font-size: 1.1rem; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 1px; }
+        .footer-links ul { list-style: none; padding: 0; }
+        .footer-links li { margin-bottom: 0.8rem; }
+        .footer-links a { color: rgba(255,255,255,0.8); text-decoration: none; transition: 0.3s; font-size: 0.95rem; }
+        .footer-links a:hover { color: white; padding-left: 5px; }
+        .social-icon { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.1); display: inline-flex; align-items: center; justify-content: center; color: white; margin-right: 10px; transition: 0.3s; text-decoration: none; }
+        .social-icon:hover { background: var(--accent); color: var(--dark); transform: translateY(-3px); }
+        
+        /* Hero y Parallax */
+        .hero-section {
+            height: 90vh;
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.6)), url('/img/campo-colombia.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+        .hero-nav { position: absolute; top: 0; width: 100%; padding: 2rem; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
+        .nav-brand { display: flex; align-items: center; gap: 10px; color: white; font-weight: 700; font-size: 1.2rem; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <nav class="hero-nav animate-entry">
+        <a href="/" class="nav-brand">
+            <img src="/img/maiz.png" height="40" alt="Logo"> AGROCONECTA
+        </a>
+        <div>
+            <a href="/auth/login" class="btn-agro btn-outline" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">
+                <i class="fa-solid fa-user"></i> Ingresar
+            </a>
+        </div>
+    </nav>
+
+    <header class="hero-section">
+        <div class="animate-entry" style="animation-delay: 0.2s;">
+            <h1 style="font-size: 4rem; color: #fff; text-shadow: 0 4px 10px rgba(0,0,0,0.3); margin-bottom: 1rem; line-height: 1.1;">
+                El Campo Colombiano<br><span style="color:var(--accent);">Sin Intermediarios</span>
+            </h1>
+            <p style="font-size: 1.5rem; margin-bottom: 2.5rem; color: #f0f0f0; max-width: 800px; margin-left: auto; margin-right: auto;">
+                Conectamos el corazón de nuestros campesinos directamente con tu mesa. Precio justo, calidad garantizada y desarrollo real para el país.
+            </p>
+            
+            <div style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
+                <a href="/catalogo" class="btn-agro btn-secondary" style="font-size: 1.1rem;">
+                    <i class="fa-solid fa-basket-shopping"></i> Ir al Mercado
+                </a>
+                <a href="/auth/register" class="btn-agro btn-outline" style="font-size: 1.1rem;">
+                    <i class="fa-solid fa-seedling"></i> Unirme Ahora
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section class="container" style="padding: 6rem 1rem;">
+        <div style="text-align: center; margin-bottom: 4rem;" class="animate-on-scroll">
+            <span style="color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: 2px;">Nuestra Promesa</span>
+            <h2 style="font-size: 2.5rem; margin-top: 0.5rem; color: var(--primary-dark);">Tecnología al servicio del Agro</h2>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+            <div class="card-agro animate-on-scroll">
+                <div style="text-align: center;">
+                    <i class="fa-solid fa-tractor" style="font-size: 3.5rem; color: var(--accent); margin-bottom: 1.5rem;"></i>
+                    <h3>Para Campesinos</h3>
+                    <p style="color: #666;">Toma el control de tus precios. Publica tus cosechas y vende directamente a quien valora tu trabajo, sin perder ganancias en el camino.</p>
+                </div>
+            </div>
+            
+            <div class="card-agro animate-on-scroll" style="transition-delay: 0.1s;">
+                <div style="text-align: center;">
+                    <i class="fa-solid fa-location-dot" style="font-size: 3.5rem; color: var(--primary); margin-bottom: 1.5rem;"></i>
+                    <h3>Trazabilidad Total</h3>
+                    <p style="color: #666;">¿Sabes de dónde viene tu comida? Con AgroConecta puedes ver la finca, el municipio y la historia detrás de cada producto.</p>
+                </div>
+            </div>
+
+            <div class="card-agro animate-on-scroll" style="transition-delay: 0.2s;">
+                <div style="text-align: center;">
+                    <i class="fa-solid fa-hand-holding-heart" style="font-size: 3.5rem; color: #d32f2f; margin-bottom: 1.5rem;"></i>
+                    <h3>Comercio Justo</h3>
+                    <p style="color: #666;">Garantizamos pagos seguros y transparentes. Apoyar lo nuestro nunca fue tan fácil, seguro y delicioso.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="background-color: white; padding: 6rem 2rem;">
+        <div class="container animate-on-scroll" style="display: flex; align-items: center; gap: 4rem; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 300px;">
+                <img src="/img/campesino.png" alt="Familia Campesina" style="width: 100%; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
+            </div>
+            <div style="flex: 1; min-width: 300px;">
+                <h2 style="font-size: 2.5rem; color: var(--primary-dark);">Detrás de cada producto hay una familia</h2>
+                <p style="font-size: 1.1rem; color: #555; margin-bottom: 2rem;">
+                    En AgroConecta no solo compras alimentos, compras historias. Ayudas a que don José en Boyacá eduque a sus hijos, o a que doña María en Cundinamarca mejore su finca.
+                </p>
+                <div style="display: flex; gap: 3rem;">
+                    <div>
+                        <h3 style="color: var(--primary); font-size: 3rem; margin: 0;">+500</h3>
+                        <p style="font-weight: 600; color: #666;">Campesinos</p>
+                    </div>
+                    <div>
+                        <h3 style="color: var(--accent); font-size: 3rem; margin: 0;">100%</h3>
+                        <p style="font-weight: 600; color: #666;">Colombiano</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container animate-on-scroll">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 3rem; margin-bottom: 4rem;">
+                
+                <div>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1.5rem;">
+                        <img src="/img/maiz.png" height="40" style="filter: brightness(0) invert(1); opacity: 0.9;" alt="Logo Footer">
+                        <h3 style="margin:0; color: white; font-size: 1.6rem; letter-spacing: 1px;">AGROCONECTA</h3>
+                    </div>
+                    <p style="opacity: 0.8; font-size: 0.95rem; line-height: 1.8; margin-bottom: 1.5rem;">
+                        Transformamos la cadena de suministro agrícola conectando corazones y cosechas. Una iniciativa para el desarrollo rural sostenible.
+                    </p>
+                    <div>
+                        <a href="#" class="social-icon"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fa-brands fa-x-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fa-brands fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Explora</h4>
+                    <ul>
+                        <li><a href="/"><i class="fa-solid fa-chevron-right" style="font-size: 0.7rem; margin-right: 8px;"></i> Inicio</a></li>
+                        <li><a href="/catalogo"><i class="fa-solid fa-chevron-right" style="font-size: 0.7rem; margin-right: 8px;"></i> Mercado Campesino</a></li>
+                        <li><a href="/auth/register"><i class="fa-solid fa-chevron-right" style="font-size: 0.7rem; margin-right: 8px;"></i> Quiero Vender</a></li>
+                        <li><a href="/auth/login"><i class="fa-solid fa-chevron-right" style="font-size: 0.7rem; margin-right: 8px;"></i> Acceso Usuarios</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Nosotros</h4>
+                    <ul>
+                        <li><a href="#"><i class="fa-solid fa-briefcase" style="font-size: 0.8rem; margin-right: 8px;"></i> Trabaja con nosotros</a></li>
+                        <li><a href="#"><i class="fa-solid fa-file-contract" style="font-size: 0.8rem; margin-right: 8px;"></i> Términos y Condiciones</a></li>
+                        <li><a href="#"><i class="fa-solid fa-shield-halved" style="font-size: 0.8rem; margin-right: 8px;"></i> Política de Privacidad</a></li>
+                        <li><a href="#"><i class="fa-solid fa-headset" style="font-size: 0.8rem; margin-right: 8px;"></i> Canal PQRS</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Contáctanos</h4>
+                    <ul style="opacity: 0.9;">
+                        <li style="display: flex; gap: 10px; margin-bottom: 1rem;">
+                            <i class="fa-solid fa-location-dot" style="color: var(--accent); margin-top: 5px;"></i>
+                            <span>Calle 26 # 57-83, Bogotá D.C.<br>Edificio Torre Central</span>
+                        </li>
+                        <li style="display: flex; gap: 10px; margin-bottom: 1rem;">
+                            <i class="fa-solid fa-phone" style="color: var(--accent); margin-top: 5px;"></i>
+                            <span>+57 (601) 321 4567<br>Línea Gratuita Nacional</span>
+                        </li>
+                        <li style="display: flex; gap: 10px;">
+                            <i class="fa-solid fa-envelope" style="color: var(--accent); margin-top: 5px;"></i>
+                            <span>contacto@agroconecta.com.co</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; text-align: center;">
+                <p style="font-size: 0.9rem; opacity: 0.6; margin-bottom: 1rem;">
+                    &copy; 2025 AgroConecta Colombia S.A.S. Todos los derechos reservados.
+                </p>
+                
+                <div style="opacity: 0.4; font-size: 0.8rem; font-family: monospace;">
+                    <span style="margin-right: 15px;">SISTEMA VERSIÓN 1.0.4</span>
+                    
+                    <a href="/simular-error" style="color: inherit; text-decoration: none; border-bottom: 1px dotted rgba(255,255,255,0.5); margin: 0 10px;" title="Probar manejo de excepciones">
+                        <i class="fa-solid fa-bug"></i> Test 500
+                    </a>
+                    
+                    <a href="/ruta-404-test" style="color: inherit; text-decoration: none; border-bottom: 1px dotted rgba(255,255,255,0.5); margin: 0 10px;" title="Probar página no encontrada">
+                        <i class="fa-solid fa-ban"></i> Test 404
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.animate-on-scroll').forEach((el) => observer.observe(el));
+    </script>
+
+</body>
+</html>

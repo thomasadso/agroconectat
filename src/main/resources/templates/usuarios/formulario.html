@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Datos de Usuario</title>
+    <link rel="stylesheet" th:href="@{/css/agroconecta.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <a href="/usuarios" style="color:white; text-decoration:none;">&larr; Volver</a>
+        <div>Gestión de Usuarios</div>
+    </div>
+
+    <div class="container animate-entry" style="max-width: 600px; margin-top: 3rem;">
+        <div class="card-agro">
+            <div style="text-align:center; margin-bottom:2rem;">
+                <i class="fa-solid fa-user-circle" style="font-size:3rem; color:var(--primary);"></i>
+                <h2 style="margin-top:1rem;">Información del Usuario</h2>
+            </div>
+
+            <form th:action="@{/usuarios}" th:object="${usuario}" method="post">
+                <input type="hidden" th:field="*{id}" />
+                
+                <label>Nombre Completo</label>
+                <input type="text" th:field="*{nombre}" class="form-control" required>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+                    <div>
+                        <label>Correo (@agroconecta...)</label>
+                        <input type="email" th:field="*{correo}" class="form-control" required>
+                    </div>
+                    <div>
+                        <label>Teléfono</label>
+                        <input type="text" th:field="*{telefono}" class="form-control">
+                    </div>
+                </div>
+
+                <label>Contraseña</label>
+                <input type="password" th:field="*{contrasena}" class="form-control" placeholder="Dejar igual si no cambia" required>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+                    <div>
+                        <label>Rol</label>
+                        <select th:field="*{rol}" class="form-control">
+                            <option value="ADMIN">Administrador</option>
+                            <option value="CAMPESINO">Campesino</option>
+                            <option value="COMPRADOR">Comprador</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Dirección</label>
+                        <input type="text" th:field="*{direccion}" class="form-control">
+                    </div>
+                </div>
+
+                <button class="btn-agro" style="width:100%; margin-top:1rem; justify-content:center;">Guardar Cambios</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

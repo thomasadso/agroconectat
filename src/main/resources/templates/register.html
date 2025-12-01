@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Únete al Campo - AgroConecta</title>
+    <link rel="stylesheet" th:href="@{/css/agroconecta.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { display: flex; height: 100vh; overflow: hidden; }
+        .register-side { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2rem; background: white; overflow-y: auto; position: relative; }
+        .image-side { flex: 1.5; background: url('/img/banner-home.jpg') center/cover; position: relative; }
+        .image-side::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to left, rgba(0,0,0,0.6), transparent); }
+        .overlay-text { position: absolute; bottom: 3rem; right: 3rem; z-index: 2; color: white; max-width: 80%; text-align: right; }
+        
+        /* ESTILO DEL BOTÓN VOLVER (IGUAL AL LOGIN) */
+        .back-btn { 
+            position: absolute; 
+            top: 2rem; 
+            left: 2rem; 
+            color: var(--primary); 
+            text-decoration: none; 
+            font-weight: 600;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        .back-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(46, 125, 50, 0.3);
+        }
+
+        @media (max-width: 900px) { .image-side { display: none; } }
+    </style>
+</head>
+<body>
+    
+    <div class="image-side animate-entry">
+        <div class="overlay-text">
+            <h1 style="font-size: 3.5rem; color: white; margin-bottom: 1rem;">Cosecha<br>Oportunidades</h1>
+            <p style="font-size: 1.2rem; opacity: 0.9;">"Desde que uso AgroConecta, mis ganancias aumentaron un 40% al vender directo."</p>
+            <p style="margin-top: 1rem; font-weight: 600;">- María González, Cundinamarca.</p>
+        </div>
+    </div>
+
+    <div class="register-side animate-entry">
+        <a th:href="@{/}" class="back-btn"><i class="fa-solid fa-house"></i> Volver al Inicio</a>
+
+        <div style="width: 100%; max-width: 400px; margin-top: 3rem;">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <img src="/img/maiz.png" height="50" alt="Logo">
+                <h2 style="margin-top: 0.5rem; color: var(--primary-dark);">Crear Cuenta</h2>
+                <p style="color: #666;">Únete a la revolución del agro colombiano.</p>
+            </div>
+
+            <div th:if="${error}" style="background:#ffebee; color:#c62828; padding:1rem; border-radius:12px; margin-bottom:1.5rem; display:flex; align-items:center; gap:10px; font-size: 0.9rem;">
+                <i class="fa-solid fa-circle-exclamation"></i> <span th:text="${error}">Error</span>
+            </div>
+
+            <form th:action="@{/auth/register}" method="post">
+                <label>Correo Electrónico</label>
+                <div style="position: relative;">
+                    <i class="fa-solid fa-envelope" style="position: absolute; left: 1rem; top: 1rem; color: #999;"></i>
+                    <input type="email" name="username" class="form-control" style="padding-left: 3rem;" 
+                           placeholder="usuario@agroconecta.com.co" 
+                           pattern="^[A-Za-z0-9._%+-]+@agroconecta\.com\.co$" 
+                           title="Solo correos corporativos @agroconecta.com.co" required />
+                </div>
+                
+                <label>Contraseña</label>
+                <div style="position: relative;">
+                    <i class="fa-solid fa-lock" style="position: absolute; left: 1rem; top: 1rem; color: #999;"></i>
+                    <input type="password" name="password" class="form-control" style="padding-left: 3rem;" placeholder="Crea una contraseña segura" required />
+                </div>
+
+                <label>¿Cuál es tu rol?</label>
+                <div style="position: relative;">
+                    <i class="fa-solid fa-user-tag" style="position: absolute; left: 1rem; top: 1rem; color: #999;"></i>
+                    <select name="rol" class="form-control" style="padding-left: 3rem;" required>
+                        <option value="" disabled selected>Seleccione...</option>
+                        <option value="CAMPESINO">Soy Campesino (Vendedor)</option>
+                        <option value="COMPRADOR">Soy Comprador (Cliente)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-agro" style="width: 100%; justify-content: center; font-size: 1.1rem; margin-top: 1rem;">
+                    Registrarme <i class="fa-solid fa-user-plus"></i>
+                </button>
+            </form>
+
+            <div style="text-align: center; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #eee;">
+                <p style="color: #666; font-size: 0.9rem;">¿Ya tienes cuenta?</p>
+                <a th:href="@{/auth/login}" style="color: var(--primary); font-weight: 700; text-decoration: none;">Inicia Sesión aquí</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

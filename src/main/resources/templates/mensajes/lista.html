@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mensajes</title>
+    <link rel="stylesheet" th:href="@{/css/agroconecta.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <div class="brand"><i class="fa-solid fa-comments"></i> Mensajería</div>
+        <a href="/" class="btn-agro btn-outline" style="font-size:0.8rem;">Inicio</a>
+    </div>
+
+    <div class="container animate-entry">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h2>Buzón de Entrada</h2>
+            <a href="/mensajes/nuevo" class="btn-agro"><i class="fa-solid fa-paper-plane"></i> Redactar</a>
+        </div>
+
+        <div class="table-container">
+            <table class="table-agro">
+                <thead>
+                    <tr>
+                        <th>De (Usuario)</th>
+                        <th>Tipo</th>
+                        <th>Contenido</th>
+                        <th>Fecha</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="m : ${mensajes}">
+                        <td><i class="fa-solid fa-user-circle" style="color:#aaa;"></i> <span th:text="${m.usuario.nombre}"></span></td>
+                        <td><span class="btn-secondary" style="padding:2px 8px; border-radius:12px; font-size:0.8rem;" th:text="${m.tipo}"></span></td>
+                        <td th:text="${m.contenido}" style="color:#555;"></td>
+                        <td th:text="${#temporals.format(m.fecha, 'dd/MM HH:mm')}"></td>
+                        <td>
+                            <a th:href="@{'/mensajes/editar/' + ${m.id}}" class="btn-secondary" style="padding:5px 10px; border-radius:6px;"><i class="fa-solid fa-pen"></i></a>
+                            <a th:href="@{'/mensajes/eliminar/' + ${m.id}}" class="btn-danger" style="padding:5px 10px; border-radius:6px; color:white;" onclick="return confirm('¿Borrar mensaje?');"><i class="fa-solid fa-trash"></i></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

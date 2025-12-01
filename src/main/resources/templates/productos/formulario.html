@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario Producto</title>
+    <link rel="stylesheet" th:href="@{/css/agroconecta.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <a href="/productos" style="color:white;"><i class="fa-solid fa-arrow-left"></i> Cancelar</a>
+        <h2><span th:text="${producto.id == null ? 'Nuevo' : 'Editar'}"></span> Producto</h2>
+        <div></div>
+    </div>
+
+    <div class="container animate-entry" style="max-width:600px;">
+        <div class="card-agro">
+            <form th:action="@{/productos}" th:object="${producto}" method="post">
+                <input type="hidden" th:field="*{id}" />
+                
+                <label>Nombre del Producto</label>
+                <div style="display:flex; align-items:center; margin-bottom:1rem;">
+                    <i class="fa-solid fa-carrot" style="padding:0.8rem; background:#f5f5f5; border:1px solid #ddd; border-right:none; border-radius:8px 0 0 8px;"></i>
+                    <input type="text" th:field="*{nombre}" class="form-control" style="margin:0; border-radius:0 8px 8px 0;" required>
+                </div>
+
+                <label>Descripción</label>
+                <textarea th:field="*{descripcion}" class="form-control" rows="3" placeholder="Detalles de tu cosecha..."></textarea>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+                    <div>
+                        <label>Precio (COP)</label>
+                        <input type="number" th:field="*{precio}" class="form-control" required>
+                    </div>
+                    <div>
+                        <label>Ubicación</label>
+                        <input type="text" th:field="*{ubicacion}" class="form-control" placeholder="Municipio" required>
+                    </div>
+                </div>
+
+                <label>Categoría</label>
+                <select th:field="*{categoria}" class="form-control">
+                    <option value="Frutas">Frutas</option>
+                    <option value="Verduras">Verduras</option>
+                    <option value="Granos">Granos</option>
+                    <option value="Lácteos">Lácteos</option>
+                    <option value="Otros">Otros</option>
+                </select>
+
+                <label>Imagen (Nombre del archivo en /img/)</label>
+                <input type="text" th:field="*{imagenUrl}" class="form-control" placeholder="ej: papa.jpg">
+
+                <button type="submit" class="btn-agro" style="width:100%; margin-top:1rem;"><i class="fa-solid fa-save"></i> Guardar</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

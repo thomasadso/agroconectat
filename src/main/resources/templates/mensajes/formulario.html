@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Redactar Mensaje</title>
+    <link rel="stylesheet" th:href="@{/css/agroconecta.css}">
+</head>
+<body>
+    <div class="header">
+        <a href="/mensajes" style="color:white; text-decoration:none;">&larr; Cancelar</a>
+        <div>Nuevo Mensaje</div>
+    </div>
+
+    <div class="container animate-entry" style="max-width: 600px; margin-top: 3rem;">
+        <div class="card-agro">
+            <form th:action="@{/mensajes}" th:object="${mensaje}" method="post">
+                <input type="hidden" th:field="*{id}" />
+                
+                <div style="display:grid; grid-template-columns: 1fr 2fr; gap:1rem;">
+                    <div>
+                        <label>ID Destinatario</label>
+                        <input type="number" th:field="*{usuario.id}" class="form-control" required placeholder="ID">
+                    </div>
+                    <div>
+                        <label>Asunto / Tipo</label>
+                        <select th:field="*{tipo}" class="form-control">
+                            <option value="Consulta">Consulta Producto</option>
+                            <option value="Soporte">Soporte Técnico</option>
+                            <option value="Reclamo">Reclamo</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <label>Mensaje</label>
+                <textarea th:field="*{contenido}" class="form-control" rows="5" placeholder="Escribe aquí..." required></textarea>
+
+                <label>Fecha Envío</label>
+                <input type="datetime-local" th:field="*{fecha}" class="form-control" required>
+
+                <button class="btn-agro" style="width:100%; margin-top:1rem;">Enviar Mensaje</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

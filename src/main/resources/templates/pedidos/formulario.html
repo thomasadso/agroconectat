@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestionar Pedido</title>
+    <link rel="stylesheet" th:href="@{/css/agroconecta.css}">
+</head>
+<body>
+    <div class="header">
+        <a href="/pedidos" style="color:white; text-decoration:none;">&larr; Volver</a>
+        <div>Detalle del Pedido</div>
+    </div>
+
+    <div class="container animate-entry" style="max-width: 600px; margin-top: 3rem;">
+        <div class="card-agro">
+            <form th:action="@{/pedidos}" th:object="${pedido}" method="post">
+                <input type="hidden" th:field="*{id}" />
+                
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+                    <div>
+                        <label>ID Cliente</label>
+                        <input type="number" th:field="*{usuario.id}" class="form-control" required>
+                    </div>
+                    <div>
+                        <label>ID Producto</label>
+                        <input type="number" th:field="*{producto.id}" class="form-control" required>
+                    </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+                    <div>
+                        <label>Cantidad</label>
+                        <input type="number" th:field="*{cantidad}" class="form-control" min="1" required>
+                    </div>
+                    <div>
+                        <label>Estado</label>
+                        <select th:field="*{estado}" class="form-control">
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="Enviado">Enviado</option>
+                            <option value="Entregado">Entregado</option>
+                            <option value="Cancelado">Cancelado</option>
+                        </select>
+                    </div>
+                </div>
+
+                <label>Fecha</label>
+                <input type="datetime-local" th:field="*{fecha}" class="form-control" required>
+
+                <button class="btn-agro" style="width:100%; margin-top:1rem;">Guardar Pedido</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

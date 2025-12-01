@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis Productos</title>
+    <link rel="stylesheet" th:href="@{/css/agroconecta.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <h2><i class="fa-solid fa-boxes-stacked"></i> Gestión de Productos</h2>
+        <form th:action="@{/logout}" method="post">
+            <button class="btn-agro btn-danger" style="padding:0.5rem 1rem; font-size:0.9rem;">Salir</button>
+        </form>
+    </div>
+
+    <div class="container animate-entry">
+        <div style="display:flex; justify-content:space-between; margin-bottom:2rem;">
+            <a href="/" class="btn-agro btn-secondary"><i class="fa-solid fa-home"></i> Ir al Inicio</a>
+            <a href="/productos/nuevo" class="btn-agro"><i class="fa-solid fa-plus"></i> Nuevo Producto</a>
+        </div>
+
+        <div class="card-agro" style="padding:0; overflow:hidden;">
+            <table class="table-agro">
+                <thead>
+                    <tr>
+                        <th>Imagen</th>
+                        <th>Producto</th>
+                        <th>Ubicación</th>
+                        <th>Precio</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="p : ${productos}">
+                        <td><img th:src="@{'/img/' + ${p.imagenUrl}}" style="width:50px; height:50px; border-radius:8px; object-fit:cover;"></td>
+                        <td>
+                            <strong th:text="${p.nombre}" style="display:block;"></strong>
+                            <small th:text="${p.categoria}" style="color:#888;"></small>
+                        </td>
+                        <td><i class="fa-solid fa-map-pin" style="color:var(--accent);"></i> <span th:text="${p.ubicacion}"></span></td>
+                        <td style="font-weight:bold; color:var(--primary);">$ <span th:text="${#numbers.formatDecimal(p.precio, 0, 'POINT', 0, 'COMMA')}"></span></td>
+                        <td>
+                            <a th:href="@{'/productos/editar/' + ${p.id}}" class="btn-secondary" style="padding:0.3rem 0.6rem; border-radius:4px; text-decoration:none;"><i class="fa-solid fa-pen"></i></a>
+                            <a th:href="@{'/productos/eliminar/' + ${p.id}}" class="btn-danger" style="padding:0.3rem 0.6rem; border-radius:4px; text-decoration:none; color:white;" onclick="return confirm('¿Eliminar?');"><i class="fa-solid fa-trash"></i></a>
+                        </td>
+                    </tr>
+                    <tr th:if="${productos.empty}">
+                        <td colspan="5" style="text-align:center; padding:2rem;">No tienes productos registrados.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

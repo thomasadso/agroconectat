@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ingreso Seguro</title>
+    <link rel="stylesheet" th:href="@{/css/agroconecta.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { display: flex; height: 100vh; overflow: hidden; }
+        .login-side { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2rem; background: white; position: relative; }
+        .image-side { flex: 1.5; background: url('/img/banner-home.jpg') center/cover; position: relative; }
+        .image-side::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to right, rgba(0,0,0,0.6), transparent); }
+        .overlay-text { position: absolute; bottom: 3rem; left: 3rem; z-index: 2; color: white; max-width: 80%; }
+        
+        /* BOTÓN VOLVER ARREGLADO */
+        .back-btn { 
+            position: absolute; 
+            top: 2rem; 
+            left: 2rem; 
+            color: var(--primary); 
+            text-decoration: none; 
+            font-weight: 600;
+            z-index: 1000; /* Siempre encima */
+            background: rgba(255, 255, 255, 0.95); /* Fondo para leerse */
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* Sombra para resaltar */
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        .back-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(46, 125, 50, 0.3);
+        }
+
+        @media (max-width: 900px) { .image-side { display: none; } }
+    </style>
+</head>
+<body>
+    <div class="login-side animate-entry">
+        <a th:href="@{/}" class="back-btn"><i class="fa-solid fa-house"></i> Volver al Inicio</a>
+        
+        <div style="width: 100%; max-width: 380px; margin-top: 2rem;">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <img src="/img/maiz.png" height="50" style="margin-bottom: 1rem;">
+                <h2 style="font-size: 2rem; margin-bottom: 0.5rem;">Bienvenido</h2>
+                <p style="color: #666; margin-bottom: 2rem;">Ingresa tus credenciales para acceder a la plataforma.</p>
+            </div>
+
+            <div th:if="${param.error}" style="background:#ffebee; color:#c62828; padding:1rem; border-radius:8px; margin-bottom:1.5rem;">
+                <i class="fa-solid fa-circle-exclamation"></i> Usuario o contraseña incorrectos
+            </div>
+            
+            <div th:if="${param.logout}" style="background:#e8f5e9; color:#2e7d32; padding:1rem; border-radius:8px; margin-bottom:1.5rem;">
+                <i class="fa-solid fa-check"></i> Sesión cerrada exitosamente
+            </div>
+
+            <form th:action="@{/login}" method="post">
+                <label>Correo Electrónico</label>
+                <div style="position: relative;">
+                    <i class="fa-solid fa-envelope" style="position: absolute; left: 1rem; top: 1rem; color: #999;"></i>
+                    <input type="text" name="username" class="form-control" style="padding-left: 3rem;" placeholder="usuario@agroconecta.com.co" required autofocus>
+                </div>
+                
+                <label>Contraseña</label>
+                <div style="position: relative;">
+                    <i class="fa-solid fa-lock" style="position: absolute; left: 1rem; top: 1rem; color: #999;"></i>
+                    <input type="password" name="password" class="form-control" style="padding-left: 3rem;" placeholder="••••••••" required>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <label style="margin: 0; font-weight: 400; cursor: pointer;">
+                        <input type="checkbox" name="remember-me"> Recordarme
+                    </label>
+                    <a href="#" style="color: var(--primary); text-decoration: none; font-weight: 600; font-size: 0.9rem;">¿Olvidaste tu clave?</a>
+                </div>
+
+                <button type="submit" class="btn-agro" style="width: 100%; justify-content: center; font-size: 1.1rem;">Iniciar Sesión</button>
+            </form>
+
+            <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #eee;">
+                <span style="color: #666;">¿Aún no tienes cuenta?</span>
+                <a th:href="@{/auth/register}" style="color: var(--primary); font-weight: 700; text-decoration: none; margin-left: 5px;">Crear cuenta nueva</a>
+            </div>
+        </div>
+    </div>
+    <div class="image-side animate-entry">
+        <div class="overlay-text">
+            <h1 style="font-size: 3.5rem; color: white; margin-bottom: 1rem;">Cultivamos<br>Progreso</h1>
+            <p style="font-size: 1.2rem; opacity: 0.9;">"Gracias a AgroConecta, vendí mi cosecha completa antes de sacarla de la tierra."</p>
+            <p style="margin-top: 1rem; font-weight: 600;">- Pedro Pérez, Boyacá.</p>
+        </div>
+    </div>
+</body>
+</html>

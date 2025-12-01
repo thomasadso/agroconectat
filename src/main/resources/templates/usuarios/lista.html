@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Usuarios</title>
+    <link rel="stylesheet" th:href="@{/css/agroconecta.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <div class="brand"><i class="fa-solid fa-users-gear"></i> Admin Usuarios</div>
+        <form th:action="@{/logout}" method="post">
+            <button class="btn-danger btn-agro" style="font-size:0.8rem;">Salir</button>
+        </form>
+    </div>
+
+    <div class="container animate-entry">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h2>Lista de Usuarios</h2>
+            <a href="/usuarios/nuevo" class="btn-agro"><i class="fa-solid fa-user-plus"></i> Nuevo Usuario</a>
+        </div>
+
+        <div class="table-container">
+            <table class="table-agro">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Rol</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="u : ${usuarios}">
+                        <td th:text="${u.id}" style="font-weight:bold;"></td>
+                        <td th:text="${u.nombre}"></td>
+                        <td th:text="${u.correo}" style="color:var(--text-light);"></td>
+                        <td>
+                            <span th:if="${u.rol == 'ADMIN'}" style="background:#ffebee; color:#c62828; padding:3px 10px; border-radius:12px; font-size:0.8rem; font-weight:bold;">ADMIN</span>
+                            <span th:if="${u.rol == 'CAMPESINO'}" style="background:#e8f5e9; color:#2e7d32; padding:3px 10px; border-radius:12px; font-size:0.8rem; font-weight:bold;">CAMPESINO</span>
+                            <span th:if="${u.rol == 'COMPRADOR'}" style="background:#e3f2fd; color:#1565c0; padding:3px 10px; border-radius:12px; font-size:0.8rem; font-weight:bold;">COMPRADOR</span>
+                        </td>
+                        <td>
+                            <a th:href="@{'/usuarios/editar/' + ${u.id}}" class="btn-secondary" style="padding:5px 10px; border-radius:6px;"><i class="fa-solid fa-pen"></i></a>
+                            <a th:href="@{'/usuarios/eliminar/' + ${u.id}}" class="btn-danger" style="padding:5px 10px; border-radius:6px; color:white; text-decoration:none;" onclick="return confirm('¿Eliminar este usuario permanentemente?');"><i class="fa-solid fa-trash"></i></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

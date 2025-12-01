@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Pagos</title>
+    <link rel="stylesheet" th:href="@{/css/agroconecta.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <div class="brand"><i class="fa-solid fa-money-bill-wave"></i> Transacciones</div>
+        <a href="/" class="btn-agro btn-outline" style="font-size:0.8rem;">Inicio</a>
+    </div>
+
+    <div class="container animate-entry">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h2>Registro de Pagos</h2>
+            <a href="/pagos/nuevo" class="btn-agro"><i class="fa-solid fa-cash-register"></i> Registrar Pago</a>
+        </div>
+
+        <div class="table-container">
+            <table class="table-agro">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Ref. Pedido</th>
+                        <th>Monto</th>
+                        <th>Método</th>
+                        <th>Fecha</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="p : ${pagos}">
+                        <td th:text="${p.id}"></td>
+                        <td th:text="'#' + ${p.pedido.id}" style="font-family:monospace;"></td>
+                        <td style="font-weight:bold; color:var(--primary);">$ <span th:text="${p.monto}"></span></td>
+                        <td><span class="btn-secondary" style="padding:2px 8px; border-radius:10px; font-size:0.8rem;" th:text="${p.metodo}"></span></td>
+                        <td th:text="${#temporals.format(p.fecha, 'dd/MM/yyyy HH:mm')}"></td>
+                        <td>
+                            <a th:href="@{'/pagos/editar/' + ${p.id}}" class="btn-secondary" style="padding:5px 10px; border-radius:6px;"><i class="fa-solid fa-pen"></i></a>
+                            <a th:href="@{'/pagos/eliminar/' + ${p.id}}" class="btn-danger" style="padding:5px 10px; border-radius:6px; color:white;" onclick="return confirm('¿Borrar registro?');"><i class="fa-solid fa-trash"></i></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

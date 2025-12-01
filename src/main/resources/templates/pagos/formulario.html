@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Pago</title>
+    <link rel="stylesheet" th:href="@{/css/agroconecta.css}">
+</head>
+<body>
+    <div class="header">
+        <a href="/pagos" style="color:white; text-decoration:none;">&larr; Volver</a>
+        <div>Detalle de Transacción</div>
+    </div>
+
+    <div class="container animate-entry" style="max-width: 500px; margin-top: 3rem;">
+        <div class="card-agro">
+            <form th:action="@{/pagos}" th:object="${pago}" method="post">
+                <input type="hidden" th:field="*{id}" />
+                
+                <label>ID del Pedido</label>
+                <input type="number" th:field="*{pedido.id}" class="form-control" required placeholder="Ej: 10">
+
+                <label>Monto (COP)</label>
+                <input type="number" step="0.01" th:field="*{monto}" class="form-control" required placeholder="$ 0.00">
+
+                <label>Método de Pago</label>
+                <select th:field="*{metodo}" class="form-control">
+                    <option value="Efectivo">Efectivo</option>
+                    <option value="Nequi">Nequi</option>
+                    <option value="Daviplata">Daviplata</option>
+                    <option value="Transferencia">Transferencia Bancaria</option>
+                </select>
+
+                <label>Fecha</label>
+                <input type="datetime-local" th:field="*{fecha}" class="form-control" required>
+
+                <button class="btn-agro" style="width:100%; margin-top:1rem;">Registrar</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis Pedidos</title>
+    <link rel="stylesheet" th:href="@{/css/agroconecta.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <div class="brand"><i class="fa-solid fa-truck-fast"></i> Pedidos</div>
+        <a href="/" class="btn-agro btn-outline" style="font-size:0.8rem;">Inicio</a>
+    </div>
+
+    <div class="container animate-entry">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h2>Historial de Pedidos</h2>
+            <a href="/pedidos/nuevo" class="btn-agro"><i class="fa-solid fa-plus"></i> Crear Pedido</a>
+        </div>
+
+        <div class="table-container">
+            <table class="table-agro">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Cliente</th>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Estado</th>
+                        <th>Fecha</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="p : ${pedidos}">
+                        <td th:text="${p.id}"></td>
+                        <td><i class="fa-solid fa-user" style="color:#aaa;"></i> <span th:text="${p.usuario.nombre}"></span></td>
+                        <td th:text="${p.producto.nombre}" style="font-weight:bold; color:var(--primary);"></td>
+                        <td th:text="${p.cantidad}"></td>
+                        <td>
+                            <span th:text="${p.estado}" style="background:#fff8e1; color:#f57f17; padding:3px 10px; border-radius:12px; font-size:0.8rem; font-weight:bold;"></span>
+                        </td>
+                        <td th:text="${#temporals.format(p.fecha, 'dd/MM/yyyy HH:mm')}"></td>
+                        <td>
+                            <a th:href="@{'/pedidos/editar/' + ${p.id}}" class="btn-secondary" style="padding:5px 10px; border-radius:6px;"><i class="fa-solid fa-pen"></i></a>
+                            <a th:href="@{'/pedidos/eliminar/' + ${p.id}}" class="btn-danger" style="padding:5px 10px; border-radius:6px; color:white;" onclick="return confirm('¿Cancelar pedido?');"><i class="fa-solid fa-xmark"></i></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

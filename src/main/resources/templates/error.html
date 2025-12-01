@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+    <link rel="stylesheet" th:href="@{/css/agroconecta.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body style="display: flex; align-items: center; justify-content: center; height: 100vh; text-align: center;">
+    <div class="card-agro animate-entry" style="max-width: 500px; padding: 4rem;">
+        <i class="fa-solid fa-bug" style="font-size: 4rem; color: #d32f2f; margin-bottom: 1rem;"></i>
+        <h1 style="color: #d32f2f;">Algo salió mal</h1>
+        <p style="color: #666; font-size: 1.1rem; margin-bottom: 2rem;">
+            No pudimos procesar tu solicitud. Nuestro equipo técnico (los administradores) ya ha sido notificado.
+        </p>
+        <div style="background: #fafafa; padding: 1rem; border-radius: 8px; margin-bottom: 2rem; text-align: left; font-family: monospace; font-size: 0.9rem;">
+            <div th:if="${status}">Status: <span th:text="${status}"></span></div>
+            <div th:if="${error}">Error: <span th:text="${error}"></span></div>
+        </div>
+        <a href="/" class="btn-agro">Volver al Inicio</a>
+    </div>
+</body>
+</html>
