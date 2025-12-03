@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel Administrativo | AgroConecta</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        /* Estilos del Sidebar */
+        .sidebar {
+            height: 100vh;
+            width: 260px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: linear-gradient(180deg, #1b5e20 0%, #2e7d32 100%);
+            padding-top: 20px;
+            color: white;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        .sidebar-brand { font-size: 1.5rem; font-weight: bold; text-align: center; margin-bottom: 2rem; display: block; color: white; text-decoration: none; }
+        .nav-link { color: rgba(255,255,255,0.8); padding: 15px 25px; border-left: 5px solid transparent; transition: 0.3s; cursor: pointer; }
+        .nav-link:hover, .nav-link.active { background: rgba(255,255,255,0.1); color: white; border-left-color: #a5d6a7; }
+        .nav-link i { margin-right: 10px; width: 20px; text-align: center; }
+
+        /* Contenido Principal */
+        .main-content { margin-left: 260px; padding: 30px; }
+        
+        /* Tarjetas de Estadísticas (KPIs) */
+        .kpi-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+            border-bottom: 4px solid transparent;
+        }
+        .kpi-card:hover { transform: translateY(-5px); }
+        .kpi-title { font-size: 0.9rem; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; }
+        .kpi-value { font-size: 2rem; font-weight: bold; margin: 10px 0; color: #212529; }
+        .icon-box { width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+
+        /* Tablas y Secciones */
+        .content-section { display: none; animation: fadeIn 0.4s; }
+        .content-section.active { display: block; }
+        .table-custom { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .table thead { background: #f1f3f5; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <a href="/" class="sidebar-brand"><i class="fas fa-leaf"></i> AgroAdmin</a>
+        <nav class="nav flex-column">
+            <a class="nav-link active" onclick="showSection('dashboard', this)">
+                <i class="fas fa-chart-pie"></i> Resumen
+            </a>
+            <a class="nav-link" onclick="showSection('usuarios', this)">
+                <i class="fas fa-users-cog"></i> Gestión Usuarios
+            </a>
+            <a class="nav-link" onclick="showSection('productos', this)">
+                <i class="fas fa-box-open"></i> Moderar Productos
+            </a>
+            <a class="nav-link" onclick="showSection('ventas', this)">
+                <i class="fas fa-file-invoice-dollar"></i> Ventas & Facturas
+            </a>
+        </nav>
+        
+        <div style="position: absolute; bottom: 20px; width: 100%; text-align: center;">
+            <form th:action="@{/logout}" method="post">
+                <button class="btn btn-outline-light btn-sm w-75">Cerrar Sesión</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="main-content">
+        
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <div>
+                <h2 class="fw-bold text-dark">Panel de Control</h2>
+                <p class="text-muted">Bienvenido, <span sec:authentication="name">Admin</span>. Tienes el control total de AgroConecta.</p>
+            </div>
+            <div class="d-flex gap-3">
+                <button class="btn btn-white shadow-sm"><i class="fas fa-bell text-warning"></i></button>
+                <button class="btn btn-white shadow-sm"><i class="fas fa-cog text-secondary"></i></button>
+            </div>
+        </div>
+
+        <div id="dashboard" class="content-section active">
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="kpi-card" style="border-bottom-color: #2e7d32;">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <div class="kpi-title">Usuarios Totales</div>
+                                <div class="kpi-value" th:text="${totalUsuarios}">0</div>
+                            </div>
+                            <div class="icon-box bg-success bg-opacity-10 text-success"><i class="fas fa-users"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="kpi-card" style="border-bottom-color: #ff9800;">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <div class="kpi-title">Productos Activos</div>
+                                <div class="kpi-value" th:text="${totalProductos}">0</div>
+                            </div>
+                            <div class="icon-box bg-warning bg-opacity-10 text-warning"><i class="fas fa-carrot"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="kpi-card" style="border-bottom-color: #2196f3;">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <div class="kpi-title">Ingresos Totales</div>
+                                <div class="kpi-value text-primary">$ <span th:text="${#numbers.formatDecimal(totalVentas, 0, 'COMMA', 0, 'POINT')}">0</span></div>
+                            </div>
+                            <div class="icon-box bg-primary bg-opacity-10 text-primary"><i class="fas fa-wallet"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0 p-4 mb-4">
+                <h5 class="fw-bold mb-4">Rendimiento de Ventas (Semanal)</h5>
+                <div style="height: 300px;">
+                    <canvas id="salesChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="usuarios" class="content-section">
+            <h4 class="mb-3">Base de Datos de Usuarios</h4>
+            <div class="table-custom p-3">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Usuario</th>
+                            <th>Correo</th>
+                            <th>Rol</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="user : ${usuarios}">
+                            <td th:text="${user.id}">#</td>
+                            <td class="fw-bold">
+                                <i class="fas fa-user-circle text-muted me-2"></i>
+                                <span th:text="${user.nombre}">Nombre</span>
+                            </td>
+                            <td th:text="${user.correo}">Correo</td>
+                            <td>
+                                <span th:if="${user.rol == 'ADMIN'}" class="badge bg-dark">ADMINISTRADOR</span>
+                                <span th:if="${user.rol == 'CAMPESINO'}" class="badge bg-success">CAMPESINO</span>
+                                <span th:if="${user.rol == 'COMPRADOR'}" class="badge bg-info">COMPRADOR</span>
+                            </td>
+                            <td><span class="badge bg-light text-success border border-success">Activo</span></td>
+                            <td>
+                                <a th:href="@{/admin/usuario/{id}(id=${user.id})}" 
+                                   class="btn btn-sm btn-primary me-1" title="Ver Detalles y Moderar">
+                                    <i class="fas fa-eye"></i> Ver
+                                </a>
+                                
+                                <a th:href="@{/admin/eliminar/usuario/{id}(id=${user.id})}" 
+                                   onclick="return confirm('¿Eliminar usuario definitivamente?')"
+                                   class="btn btn-sm btn-outline-danger" title="Eliminar Usuario">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="productos" class="content-section">
+            <div class="alert alert-warning border-0 shadow-sm d-flex align-items-center mb-4">
+                <i class="fas fa-exclamation-triangle me-3 fs-4"></i>
+                <div>
+                    <strong>Zona de Moderación Global:</strong> Aquí puedes ver TODOS los productos de la plataforma y censurar los inapropiados.
+                </div>
+            </div>
+
+            <div class="row">
+                <div th:each="prod : ${productos}" class="col-md-6 col-lg-4 mb-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="row g-0 h-100">
+                            <div class="col-4">
+                                <img th:src="@{'/img/' + ${prod.imagenUrl}}" class="img-fluid rounded-start h-100" style="object-fit: cover;" onerror="this.src='/img/maiz.png'">
+                            </div>
+                            <div class="col-8">
+                                <div class="card-body">
+                                    <h6 class="card-title fw-bold" th:text="${prod.nombre}">Producto</h6>
+                                    <p class="card-text small text-muted mb-1">
+                                        Vendedor: <span th:text="${prod.usuario != null ? prod.usuario.nombre : 'Desconocido'}"></span>
+                                    </p>
+                                    <p class="card-text fw-bold text-success">$ <span th:text="${prod.precio}">0</span></p>
+                                    
+                                    <a th:href="@{/admin/eliminar/producto/{id}(id=${prod.id})}" 
+                                       onclick="return confirm('¿Censurar y eliminar esta publicación?')"
+                                       class="btn btn-sm btn-danger w-100">
+                                        <i class="fas fa-ban"></i> Censurar
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="ventas" class="content-section">
+            <h4 class="mb-3">Historial de Transacciones</h4>
+            <div class="table-custom p-3">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th># Pedido</th>
+                            <th>Fecha</th>
+                            <th>Cliente</th>
+                            <th>Producto</th>
+                            <th>Total</th>
+                            <th>Comprobante</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="pedido : ${pedidos}">
+                            <td class="fw-bold" th:text="'ORD-' + ${pedido.id}"></td>
+                            <td th:text="${#temporals.format(pedido.fecha, 'dd/MM/yyyy HH:mm')}"></td>
+                            <td th:text="${pedido.usuario.nombre}">Cliente</td>
+                            <td th:text="${pedido.producto.nombre}">Producto</td>
+                            <td class="text-success fw-bold" th:text="'$ ' + ${pedido.total}">Total</td>
+                            <td>
+                                <a th:href="@{/admin/factura/{id}(id=${pedido.id})}" class="btn btn-sm btn-dark">
+                                    <i class="fas fa-file-pdf"></i> Descargar PDF
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Función para cambiar de pestañas (Oculta divs y muestra el seleccionado)
+        function showSection(sectionId, element) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.content-section').forEach(el => el.classList.remove('active'));
+            // Mostrar la seleccionada
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Actualizar estilo del menú activo
+            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        // Configuración del Gráfico de Ventas (Chart.js)
+        const ctx = document.getElementById('salesChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'],
+                datasets: [{
+                    label: 'Ventas en $ COP',
+                    data: [15000, 25000, 10000, 45000, 30000, 60000, 85000], // Datos simulados para demostración
+                    borderColor: '#2e7d32',
+                    backgroundColor: 'rgba(46, 125, 50, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' },
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>

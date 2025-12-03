@@ -9,10 +9,18 @@
 <body>
     <div class="header">
         <a href="/" class="brand"><img src="/img/maiz.png" height="30"> AGROCONECTA</a>
+        
         <div sec:authorize="isAuthenticated()" style="display: flex; gap: 1rem; align-items: center;">
+            
+            <a href="/carrito" class="btn-agro" style="background-color: #ffc107; color: #333; padding: 0.5rem 1rem; font-size: 0.9rem; font-weight: bold; border: none;">
+                <i class="fa-solid fa-shopping-cart"></i> Tu Canasta
+            </a>
             <span style="font-size: 0.9rem; opacity: 0.9;">Hola, <span sec:authentication="name">Usuario</span></span>
-            <form th:action="@{/logout}" method="post"><button class="btn-agro btn-danger" style="padding: 0.5rem 1rem; font-size: 0.8rem;">Salir</button></form>
+            <form th:action="@{/logout}" method="post" style="margin: 0;">
+                <button class="btn-agro btn-danger" style="padding: 0.5rem 1rem; font-size: 0.8rem;">Salir</button>
+            </form>
         </div>
+
         <a sec:authorize="!isAuthenticated()" href="/auth/login" class="btn-agro btn-outline">Ingresar</a>
     </div>
 
@@ -44,9 +52,10 @@
         <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem;">
             <div th:each="p : ${productos}" class="card-agro" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
                 <div style="height: 200px; overflow: hidden; position: relative;">
-                    <img th:src="@{'/img/' + ${p.imagenUrl}}" style="width: 100%; height: 100%; object-fit: cover; transition: 0.5s;">
+                    <img th:src="@{'/img/' + ${p.imagenUrl}}" style="width: 100%; height: 100%; object-fit: cover; transition: 0.5s;" onerror="this.src='/img/maiz.png'">
                     <span style="position: absolute; top: 1rem; right: 1rem; background: var(--accent); color: var(--text-dark); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700;" th:text="${p.categoria}"></span>
                 </div>
+                
                 <div style="padding: 1.5rem; flex: 1; display: flex; flex-direction: column;">
                     <h3 th:text="${p.nombre}" style="margin: 0; font-size: 1.3rem;"></h3>
                     <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;"><i class="fa-solid fa-location-dot" style="color: var(--primary);"></i> <span th:text="${p.ubicacion}"></span></p>
@@ -54,7 +63,13 @@
                     
                     <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 1rem;">
                         <div style="font-size: 1.4rem; font-weight: 700; color: var(--primary);">$ <span th:text="${#numbers.formatDecimal(p.precio, 0, 'POINT', 0, 'COMMA')}"></span></div>
-                        <a th:href="@{'/catalogo/detalle/' + ${p.id}}" class="btn-agro btn-secondary" style="font-size: 0.9rem; padding: 0.5rem 1rem;">Ver Detalle</a>
+                        
+                        <div style="display: flex; gap: 5px;">
+                            <a th:href="@{'/carrito/agregar/' + ${p.id}}" class="btn-agro" style="background-color: #2e7d32; padding: 0.5rem 1rem;" title="Agregar al Carrito">
+                                <i class="fa-solid fa-cart-plus"></i>
+                            </a>
+                            <a th:href="@{'/catalogo/detalle/' + ${p.id}}" class="btn-agro btn-secondary" style="font-size: 0.9rem; padding: 0.5rem 1rem;">Ver</a>
+                        </div>
                     </div>
                 </div>
             </div>

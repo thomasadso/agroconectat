@@ -13,8 +13,19 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication auth) throws IOException, ServletException {
         var roles = auth.getAuthorities().stream().map(Object::toString).toList();
-        if (roles.contains("ROLE_ADMIN")) response.sendRedirect("/usuarios");
-        else if (roles.contains("ROLE_CAMPESINO")) response.sendRedirect("/productos");
-        else response.sendRedirect("/catalogo");
+        
+        // --- AQUÍ ESTABA EL ERROR ---
+        // Antes decía "/usuarios", ahora lo mandamos al Dashboard Pro
+        if (roles.contains("ROLE_ADMIN")) {
+            response.sendRedirect("/admin/dashboard");
+        } 
+        // ----------------------------
+        
+        else if (roles.contains("ROLE_CAMPESINO")) {
+            response.sendRedirect("/productos");
+        } 
+        else {
+            response.sendRedirect("/catalogo");
+        }
     }
 }

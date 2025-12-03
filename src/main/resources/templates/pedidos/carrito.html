@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tu Canasta | AgroConecta</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-light bg-white shadow-sm mb-4">
+        <div class="container">
+            <a class="navbar-brand text-success fw-bold" href="/home">AgroConecta</a>
+            <a href="/catalogo" class="btn btn-sm btn-outline-success">Seguir Comprando</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2 class="mb-4"><i class="fas fa-shopping-basket text-success"></i> Tu Canasta de Compras</h2>
+
+        <div th:if="${carrito == null or carrito.empty}" class="alert alert-warning text-center">
+            <h4>Tu canasta está vacía 😢</h4>
+            <p>Apoya a nuestros campesinos agregando productos frescos.</p>
+            <a href="/catalogo" class="btn btn-success mt-2">Ir al Mercado</a>
+        </div>
+
+        <div th:if="${carrito != null and !carrito.empty}" class="row">
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-body p-0">
+                        <table class="table table-hover m-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Precio</th>
+                                    <th>Cant.</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="item : ${carrito}">
+                                    <td th:text="${item.producto.nombre}">Papa</td>
+                                    <td th:text="'$ ' + ${item.producto.precio}">$ 2000</td>
+                                    <td th:text="${item.cantidad}">1</td>
+                                    <td class="fw-bold" th:text="'$ ' + ${item.total}">$ 2000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <a href="/carrito/vaciar" class="btn btn-outline-danger btn-sm mt-3">
+                    <i class="fas fa-trash"></i> Vaciar Canasta
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow-sm border-0 bg-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Resumen</h5>
+                        <hr>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Total a Pagar:</span>
+                            <span class="fw-bold text-success fs-4" th:text="'$ ' + ${totalCompra}">$ 0</span>
+                        </div>
+                        <a href="/carrito/checkout" class="btn btn-success w-100 py-2 fw-bold">
+                            <i class="fas fa-credit-card"></i> Pagar Ahora
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
