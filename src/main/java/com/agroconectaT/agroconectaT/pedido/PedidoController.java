@@ -1,53 +1,76 @@
 package com.agroconectaT.agroconectaT.pedido;
 
+import com.agroconectaT.agroconectaT.producto.Producto;
+import com.agroconectaT.agroconectaT.producto.ProductoRepository;
+import com.agroconectaT.agroconectaT.usuario.Usuario;
+import com.agroconectaT.agroconectaT.usuario.UsuarioService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
+
+import java.io.IOException;
+import java.util.Date;
 
 @Controller
 @RequestMapping("/pedidos")
 public class PedidoController {
+
     @Autowired
-    private PedidoService pedidoService;
+    private PedidoRepository pedidoRepository;
 
-    @GetMapping
-    public String listarPedidos(Model model) {
-        List<Pedido> pedidos = pedidoService.listarTodos();
-        model.addAttribute("pedidos", pedidos);
-        return "pedidos/lista";
+    @Autowired
+    private ProductoRepository productoRepository;
+
+    @Autowired
+    private UsuarioService usuarioService;
+
+    @Autowired
+    private FacturaPDFService facturaPDFService;
+
+    @PostMapping("/comprar")
+    public String procesarCompra(@RequestParam("productoId") Integer productoId, 
+                                 @RequestParam("cantidad") Integer cantidad, 
+                                 Authentication auth) {
+        try {
+            if (auth == null) return "redirect:/auth/login";
+
+            Producto producto = productoRepository.findById(productoId).orElse(null);
+            Usuario comprador = usuarioService.buscarPorCorreo(auth.getName()).orElse(null);
+
+            if (producto != null && comprador != null) {
+                Pedido pedido = new Pedido();
+                pedido.setProducto(producto);
+                pedido.setUsuario(comprador);
+                pedido.setCantidad(cantidad);
+                pedido.setTotal(producto.getPrecio() * cantidad);
+                pedido.setFecha(new Date());
+                pedido.setEstado("PAGADO");
+                
+                Pedido guardado = pedidoRepository.save(pedido);
+                return "redirect:/pedidos/exito/" + guardado.getId();
+            }
+        } catch (Exception e) {
+            System.out.println("ERROR EN COMPRA: " + e.getMessage());
+        }
+        return "redirect:/catalogo";
     }
 
-    @GetMapping("/nuevo")
-    public String mostrarFormularioNuevo(Model model) {
-        model.addAttribute("pedido", new Pedido());
-        return "pedidos/formulario";
+    @GetMapping("/exito/{id}")
+    public String compraExitosa(@PathVariable("id") Integer id, Model model) {
+        model.addAttribute("pedidoId", id);
+        return "pedidos/exito";
     }
 
-    @PostMapping
-    public String guardarPedido(@ModelAttribute Pedido pedido) {
-        pedidoService.guardar(pedido);
-        return "redirect:/pedidos";
-    }
-
-    @GetMapping("/editar/{id}")
-    public String mostrarFormularioEditar(@PathVariable Integer id, Model model) {
-        Pedido pedido = pedidoService.buscarPorId(id).orElseThrow();
-        model.addAttribute("pedido", pedido);
-        return "pedidos/formulario";
-    }
-
-    @PostMapping("/editar/{id}")
-    public String actualizarPedido(@PathVariable Integer id, @ModelAttribute Pedido pedido) {
-        pedido.setId(id);
-        pedidoService.guardar(pedido);
-        return "redirect:/pedidos";
-    }
-
-    @GetMapping("/eliminar/{id}")
-    public String eliminarPedido(@PathVariable Integer id) {
-        pedidoService.eliminar(id);
-        return "redirect:/pedidos";
+    @GetMapping("/factura/{id}")
+    public void descargarFactura(@PathVariable("id") Integer id, HttpServletResponse response) throws IOException {
+        Pedido pedido = pedidoRepository.findById(id).orElse(null);
+        if (pedido != null) {
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition", "attachment; filename=Factura_AgroConecta.pdf");
+            facturaPDFService.exportar(response, pedido);
+        }
     }
 }

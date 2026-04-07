@@ -6,43 +6,43 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
     
     @Autowired
-    private AuthenticationSuccessHandler customAuthenticationSuccessHandler;
+    private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                // 1. RECURSOS PÚBLICOS
+                // 1. ZONA PÚBLICA (Solo Home y Formularios de Registro/Login)
                 .requestMatchers("/css/**", "/img/**", "/js/**", "/webjars/**", "/favicon.ico").permitAll()
-                
-                // 2. PÁGINAS PÚBLICAS
                 .requestMatchers("/", "/index", "/home").permitAll()
                 .requestMatchers("/auth/**", "/login", "/logout", "/register").permitAll()
-                
-                // 3. RUTAS DE ERROR Y DEMOSTRACIÓN (Aquí estaba el fallo)
-                // Permitimos la ruta trampa "/ruta-404-test" explícitamente
                 .requestMatchers("/error", "/simular-error", "/ruta-404-test").permitAll()
                 
-                // 4. ZONA PRIVADA (Catálogo público)
-                .requestMatchers("/catalogo/**").permitAll() 
+                // =========================================================
+                // EXCLUSIVIDAD DE ROLES (LA MAGIA)
+                // =========================================================
+                // 2. SOLO ADMINISTRADOR: Control total del sistema
+                .requestMatchers("/admin/**", "/usuarios/**").hasRole("ADMIN")
                 
-                // 5. PERMISOS POR ROL
-                .requestMatchers("/usuarios/**").hasRole("ADMIN")
-                .requestMatchers("/productos/nuevo", "/productos/editar/**", "/productos/eliminar/**").hasAnyRole("ADMIN", "CAMPESINO")
-                .requestMatchers("/pedidos/**", "/pagos/**").authenticated()
+                // 3. SOLO CAMPESINO: Gestión de su finca y sus productos
+                .requestMatchers("/productos/**").hasRole("CAMPESINO")
                 
+                // 4. SOLO COMPRADOR: Ver el catálogo y comprar
+                .requestMatchers("/catalogo/**", "/carrito/**", "/pedidos/**", "/pagos/**").hasRole("COMPRADOR")
+                
+                // Cualquier otra cosa, debe estar autenticado
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
                 .loginPage("/auth/login")
                 .loginProcessingUrl("/login")
+                // Aquí usamos el manejador de éxito para redirigir según el rol
                 .successHandler(customAuthenticationSuccessHandler)
                 .failureUrl("/auth/login?error")
                 .permitAll()

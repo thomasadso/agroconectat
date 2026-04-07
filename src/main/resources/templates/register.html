@@ -11,33 +11,8 @@
         .image-side { flex: 1.5; background: url('/img/banner-home.jpg') center/cover; position: relative; }
         .image-side::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to left, rgba(0,0,0,0.6), transparent); }
         .overlay-text { position: absolute; bottom: 3rem; right: 3rem; z-index: 2; color: white; max-width: 80%; text-align: right; }
-        
-        /* ESTILO DEL BOTÓN VOLVER (IGUAL AL LOGIN) */
-        .back-btn { 
-            position: absolute; 
-            top: 2rem; 
-            left: 2rem; 
-            color: var(--primary); 
-            text-decoration: none; 
-            font-weight: 600;
-            z-index: 1000;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 0.6rem 1.2rem;
-            border-radius: 50px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
-        }
-        .back-btn:hover {
-            background: var(--primary);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(46, 125, 50, 0.3);
-        }
-
+        .back-btn { position: absolute; top: 2rem; left: 2rem; color: var(--primary); text-decoration: none; font-weight: 600; z-index: 1000; background: rgba(255, 255, 255, 0.95); padding: 0.6rem 1.2rem; border-radius: 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: 0.3s; display: flex; align-items: center; gap: 8px; font-size: 0.9rem; }
+        .back-btn:hover { background: var(--primary); color: white; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(46, 125, 50, 0.3); }
         @media (max-width: 900px) { .image-side { display: none; } }
     </style>
 </head>
@@ -65,29 +40,36 @@
                 <i class="fa-solid fa-circle-exclamation"></i> <span th:text="${error}">Error</span>
             </div>
 
-            <form th:action="@{/auth/register}" method="post">
+            <form th:action="@{/auth/register}" th:object="${usuario}" method="post">
+                
+                <label>Nombre Completo</label>
+                <div style="position: relative; margin-bottom: 1rem;">
+                    <i class="fa-solid fa-user" style="position: absolute; left: 1rem; top: 1rem; color: #999;"></i>
+                    <input type="text" name="nombre" class="form-control" style="padding-left: 3rem;" placeholder="Ej: Don José" required />
+                </div>
+
                 <label>Correo Electrónico</label>
-                <div style="position: relative;">
+                <div style="position: relative; margin-bottom: 1rem;">
                     <i class="fa-solid fa-envelope" style="position: absolute; left: 1rem; top: 1rem; color: #999;"></i>
-                    <input type="email" name="username" class="form-control" style="padding-left: 3rem;" 
+                    <input type="email" name="correo" class="form-control" style="padding-left: 3rem;" 
                            placeholder="usuario@agroconecta.com.co" 
                            pattern="^[A-Za-z0-9._%+-]+@agroconecta\.com\.co$" 
                            title="Solo correos corporativos @agroconecta.com.co" required />
                 </div>
                 
                 <label>Contraseña</label>
-                <div style="position: relative;">
+                <div style="position: relative; margin-bottom: 1rem;">
                     <i class="fa-solid fa-lock" style="position: absolute; left: 1rem; top: 1rem; color: #999;"></i>
-                    <input type="password" name="password" class="form-control" style="padding-left: 3rem;" placeholder="Crea una contraseña segura" required />
+                    <input type="password" name="contrasena" class="form-control" style="padding-left: 3rem;" placeholder="Crea una contraseña segura" required />
                 </div>
 
-                <label>¿Cuál es tu rol?</label>
-                <div style="position: relative;">
+                <label>¿A qué vienes a AgroConecta?</label>
+                <div style="position: relative; margin-bottom: 1rem;">
                     <i class="fa-solid fa-user-tag" style="position: absolute; left: 1rem; top: 1rem; color: #999;"></i>
                     <select name="rol" class="form-control" style="padding-left: 3rem;" required>
                         <option value="" disabled selected>Seleccione...</option>
-                        <option value="CAMPESINO">Soy Campesino (Vendedor)</option>
-                        <option value="COMPRADOR">Soy Comprador (Cliente)</option>
+                        <option value="CAMPESINO">Quiero Vender (Campesino)</option>
+                        <option value="COMPRADOR">Quiero Comprar (Cliente)</option>
                     </select>
                 </div>
 

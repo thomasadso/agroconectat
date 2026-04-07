@@ -1,50 +1,94 @@
 package com.agroconectaT.agroconectaT.pedido;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*; 
-import lombok.*;
-import com.agroconectaT.agroconectaT.usuario.Usuario;
 import com.agroconectaT.agroconectaT.producto.Producto;
-import java.time.LocalDateTime; // Necesario para la fecha
+import com.agroconectaT.agroconectaT.usuario.Usuario;
+import jakarta.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "pedido")
-@Data // Esto crea automáticamente getTotal(), getFecha(), getId(), etc.
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class Pedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private Usuario usuario;
+    private Integer cantidad;
+    private String estado;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fecha;
 
-    @ManyToOne
-    @JoinColumn(name = "producto_id")
+    private Double total;
+
+    // CONEXIÓN CON PRODUCTO (LA LLAVE FORÁNEA)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "producto_id", nullable = false) 
     private Producto producto;
 
-    @NotNull
-    @Min(1)
-    private Integer cantidad;
+    // CONEXIÓN CON USUARIO (EL COMPRADOR)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
 
-    // --- ESTOS SON LOS CAMPOS QUE FALTABAN ---
-    @NotNull
-    private Double total;  // ¡Esto arregla el error getTotal()!
+    // --- CONSTRUCTOR VACÍO (Obligatorio para Hibernate) ---
+    public Pedido() {
+    }
 
-    @Column(columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime fecha; // ¡Esto arregla el error getFecha()!
-    // -----------------------------------------
+    // --- GETTERS Y SETTERS (Fundamentales para que Java lea los datos) ---
+    public Integer getId() {
+        return id;
+    }
 
-    @NotBlank
-    private String estado;
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-    // Asignar fecha automática antes de guardar
-    @PrePersist
-    public void asignarFecha() {
-        this.fecha = LocalDateTime.now();
+    public Integer getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(Integer cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public Double getTotal() {
+        return total;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
+    }
+
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }

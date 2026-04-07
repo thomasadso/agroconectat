@@ -1,12 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>AgroConecta - El Renacer del Campo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroConecta - Tecnología para el Campo Colombiano</title>
     <link rel="stylesheet" th:href="@{/css/agroconecta.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* Estilos específicos para el Mega Footer */
+        body { font-family: 'Montserrat', sans-serif; margin: 0; padding: 0; }
+        .gov-bar { background-color: #004884; color: white; padding: 10px 20px; font-size: 0.85rem; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
         .footer-links h4 { color: var(--accent); font-size: 1.1rem; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 1px; }
         .footer-links ul { list-style: none; padding: 0; }
         .footer-links li { margin-bottom: 0.8rem; }
@@ -14,187 +17,174 @@
         .footer-links a:hover { color: white; padding-left: 5px; }
         .social-icon { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.1); display: inline-flex; align-items: center; justify-content: center; color: white; margin-right: 10px; transition: 0.3s; text-decoration: none; }
         .social-icon:hover { background: var(--accent); color: var(--dark); transform: translateY(-3px); }
-        
-        /* Hero y Parallax */
-        .hero-section {
-            height: 90vh;
-            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.6)), url('/img/campo-colombia.jpg');
-            background-size: cover;
-            background-attachment: fixed;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: white;
-            position: relative;
-        }
-        .hero-nav { position: absolute; top: 0; width: 100%; padding: 2rem; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
-        .nav-brand { display: flex; align-items: center; gap: 10px; color: white; font-weight: 700; font-size: 1.2rem; text-decoration: none; }
+        .hero-section { min-height: 90vh; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url('/img/campo-colombia.jpg'); background-size: cover; background-position: center; background-attachment: fixed; display: flex; flex-direction: column; align-items: center; color: white; }
+        .hero-nav { width: 100%; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); backdrop-filter: blur(5px); }
+        .hero-content { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem; max-width: 900px; }
+        .nav-brand { display: flex; align-items: center; gap: 10px; color: white; font-weight: 700; font-size: 1.5rem; text-decoration: none; letter-spacing: 1px; }
+        .fade-in-up { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .fade-in-up.visible { opacity: 1; transform: translateY(0); }
     </style>
 </head>
 <body>
-
-    <nav class="hero-nav animate-entry">
-        <a href="/" class="nav-brand">
-            <img src="/img/maiz.png" height="40" alt="Logo"> AGROCONECTA
-        </a>
-        <div>
-            <a href="/auth/login" class="btn-agro btn-outline" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">
-                <i class="fa-solid fa-user"></i> Ingresar
-            </a>
-        </div>
-    </nav>
+    <div class="gov-bar">
+        <span>🇨🇴 Plataforma Tecnológica para la Reactivación del Agro Colombiano</span>
+        <span><i class="fa-solid fa-building-wheat"></i> En alineación con el desarrollo rural</span>
+    </div>
 
     <header class="hero-section">
-        <div class="animate-entry" style="animation-delay: 0.2s;">
-            <h1 style="font-size: 4rem; color: #fff; text-shadow: 0 4px 10px rgba(0,0,0,0.3); margin-bottom: 1rem; line-height: 1.1;">
-                El Campo Colombiano<br><span style="color:var(--accent);">Sin Intermediarios</span>
+        <nav class="hero-nav">
+            <a th:href="@{/}" class="nav-brand">
+                <i class="fa-solid fa-leaf" style="color: #4caf50;"></i> AGROCONECTA
+            </a>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <a th:href="@{/catalogo}" class="btn-agro" style="background: transparent; border: none; color: white; font-weight: 600; padding-top: 10px; text-decoration: none;">Catálogo</a>
+                
+                <a sec:authorize="isAnonymous()" th:href="@{/auth/login}" class="btn-agro btn-outline" style="padding: 0.6rem 1.5rem; font-size: 0.9rem; border-radius: 30px; border: 2px solid white; color: white; text-decoration: none;">
+                    <i class="fa-solid fa-user"></i> Ingresar
+                </a>
+
+                <a sec:authorize="hasRole('CAMPESINO')" th:href="@{/productos}" class="btn-agro btn-outline" style="padding: 0.6rem 1.5rem; font-size: 0.9rem; border-radius: 30px; border: 2px solid #f89820; color: #f89820; background: rgba(255,255,255,0.1); text-decoration: none;">
+                    <i class="fa-solid fa-tractor"></i> Mi Finca
+                </a>
+
+                <a sec:authorize="hasRole('COMPRADOR')" th:href="@{/carrito}" class="btn-agro btn-outline" style="padding: 0.6rem 1.5rem; font-size: 0.9rem; border-radius: 30px; border: 2px solid #4caf50; color: #4caf50; background: rgba(255,255,255,0.1); text-decoration: none;">
+                    <i class="fa-solid fa-cart-shopping"></i> Mi Canasta
+                </a>
+
+                <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post" style="margin: 0;">
+                    <button type="submit" class="btn-agro" style="padding: 0.6rem 1.5rem; font-size: 0.9rem; border-radius: 30px; background: #d32f2f; color: white; border: none; cursor: pointer;">
+                        <i class="fa-solid fa-right-from-bracket"></i> Salir
+                    </button>
+                </form>
+            </div>
+        </nav>
+
+        <div class="hero-content fade-in-up visible">
+            <div style="display: inline-block; background: rgba(76, 175, 80, 0.2); padding: 5px 15px; border-radius: 20px; border: 1px solid #4caf50; color: #a5d6a7; font-size: 0.9rem; font-weight: 600; margin-bottom: 1.5rem; letter-spacing: 1px;">
+                CULTIVANDO EL FUTURO DE COLOMBIA
+            </div>
+            <h1 style="font-size: 4.5rem; color: #fff; font-weight: 800; margin-bottom: 1rem; line-height: 1.1;">
+                El Campo Colombiano<br><span style="color: #4caf50;">Directo a tu Mesa</span>
             </h1>
-            <p style="font-size: 1.5rem; margin-bottom: 2.5rem; color: #f0f0f0; max-width: 800px; margin-left: auto; margin-right: auto;">
-                Conectamos el corazón de nuestros campesinos directamente con tu mesa. Precio justo, calidad garantizada y desarrollo real para el país.
+            <p style="font-size: 1.3rem; margin-bottom: 3rem; color: #e0e0e0; font-weight: 400; line-height: 1.6;">
+                Conectamos el esfuerzo incansable de nuestros campesinos con tu hogar. Garantizamos precios justos para quien siembra y alimentos frescos para quien consume, sin intermediarios.
             </p>
             
             <div style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
-                <a href="/catalogo" class="btn-agro btn-secondary" style="font-size: 1.1rem;">
-                    <i class="fa-solid fa-basket-shopping"></i> Ir al Mercado
+                <a th:href="@{/catalogo}" class="btn-agro" style="background-color: #4caf50; color: white; padding: 15px 30px; border-radius: 30px; font-size: 1.1rem; font-weight: 600; text-decoration: none; box-shadow: 0 10px 20px rgba(76, 175, 80, 0.3); transition: 0.3s;">
+                    <i class="fa-solid fa-basket-shopping"></i> Comprar Cosechas
                 </a>
-                <a href="/auth/register" class="btn-agro btn-outline" style="font-size: 1.1rem;">
-                    <i class="fa-solid fa-seedling"></i> Unirme Ahora
+                
+                <a sec:authorize="!hasRole('CAMPESINO')" th:href="@{/auth/register}" class="btn-agro" style="background-color: transparent; border: 2px solid white; color: white; padding: 13px 30px; border-radius: 30px; font-size: 1.1rem; font-weight: 600; text-decoration: none; transition: 0.3s;">
+                    <i class="fa-solid fa-tractor"></i> Quiero Vender (Campesino)
                 </a>
             </div>
         </div>
     </header>
 
-    <section class="container" style="padding: 6rem 1rem;">
-        <div style="text-align: center; margin-bottom: 4rem;" class="animate-on-scroll">
-            <span style="color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: 2px;">Nuestra Promesa</span>
-            <h2 style="font-size: 2.5rem; margin-top: 0.5rem; color: var(--primary-dark);">Tecnología al servicio del Agro</h2>
+    <section class="container" style="padding: 7rem 1rem;">
+        <div style="text-align: center; margin-bottom: 5rem;" class="fade-in-up">
+            <span style="color: #4caf50; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;">Nuestro Propósito</span>
+            <h2 style="font-size: 2.8rem; font-weight: 800; margin-top: 0.5rem; color: #2e7d32;">Comprometidos con el Agro</h2>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-            <div class="card-agro animate-on-scroll">
-                <div style="text-align: center;">
-                    <i class="fa-solid fa-tractor" style="font-size: 3.5rem; color: var(--accent); margin-bottom: 1.5rem;"></i>
-                    <h3>Para Campesinos</h3>
-                    <p style="color: #666;">Toma el control de tus precios. Publica tus cosechas y vende directamente a quien valora tu trabajo, sin perder ganancias en el camino.</p>
-                </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem;">
+            <div class="card-agro fade-in-up" style="background: white; padding: 40px 30px; border-radius: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.05); text-align: center; border-bottom: 5px solid #f89820;">
+                <i class="fa-solid fa-bullseye" style="font-size: 4rem; color: #f89820; margin-bottom: 1.5rem;"></i>
+                <h3 style="font-weight: 800; margin-bottom: 15px; color: #333;">Nuestra Misión</h3>
+                <p style="color: #666; font-size: 1.05rem; line-height: 1.6;">Conectar a los campesinos colombianos directamente con el consumidor final a través de una plataforma tecnológica accesible, eliminando intermediarios y garantizando un comercio justo que dignifique la labor rural.</p>
             </div>
             
-            <div class="card-agro animate-on-scroll" style="transition-delay: 0.1s;">
-                <div style="text-align: center;">
-                    <i class="fa-solid fa-location-dot" style="font-size: 3.5rem; color: var(--primary); margin-bottom: 1.5rem;"></i>
-                    <h3>Trazabilidad Total</h3>
-                    <p style="color: #666;">¿Sabes de dónde viene tu comida? Con AgroConecta puedes ver la finca, el municipio y la historia detrás de cada producto.</p>
-                </div>
+            <div class="card-agro fade-in-up" style="transition-delay: 0.2s; background: white; padding: 40px 30px; border-radius: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.05); text-align: center; border-bottom: 5px solid #3776ab;">
+                <i class="fa-solid fa-eye" style="font-size: 4rem; color: #3776ab; margin-bottom: 1.5rem;"></i>
+                <h3 style="font-weight: 800; margin-bottom: 15px; color: #333;">Nuestra Visión</h3>
+                <p style="color: #666; font-size: 1.05rem; line-height: 1.6;">Para el 2028, ser la plataforma líder a nivel nacional en la comercialización directa de productos agrícolas, impulsando el desarrollo tecnológico rural, la sostenibilidad y la soberanía alimentaria en toda Colombia.</p>
             </div>
 
-            <div class="card-agro animate-on-scroll" style="transition-delay: 0.2s;">
-                <div style="text-align: center;">
-                    <i class="fa-solid fa-hand-holding-heart" style="font-size: 3.5rem; color: #d32f2f; margin-bottom: 1.5rem;"></i>
-                    <h3>Comercio Justo</h3>
-                    <p style="color: #666;">Garantizamos pagos seguros y transparentes. Apoyar lo nuestro nunca fue tan fácil, seguro y delicioso.</p>
-                </div>
+            <div class="card-agro fade-in-up" style="transition-delay: 0.4s; background: white; padding: 40px 30px; border-radius: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.05); text-align: center; border-bottom: 5px solid #4caf50;">
+                <i class="fa-solid fa-handshake-angle" style="font-size: 4rem; color: #4caf50; margin-bottom: 1.5rem;"></i>
+                <h3 style="font-weight: 800; margin-bottom: 15px; color: #333;">Nuestros Valores</h3>
+                <p style="color: #666; font-size: 1.05rem; line-height: 1.6;">Transparencia total en cada transacción, equidad económica para el productor, calidad garantizada para el comprador y un compromiso inquebrantable con el progreso de nuestras familias campesinas.</p>
             </div>
         </div>
     </section>
 
-    <section style="background-color: white; padding: 6rem 2rem;">
-        <div class="container animate-on-scroll" style="display: flex; align-items: center; gap: 4rem; flex-wrap: wrap;">
+    <section style="background-color: #f9f9f9; padding: 6rem 2rem;">
+        <div class="container fade-in-up" style="display: flex; align-items: center; gap: 4rem; flex-wrap: wrap;">
             <div style="flex: 1; min-width: 300px;">
-                <img src="/img/campesino.png" alt="Familia Campesina" style="width: 100%; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
+                <img th:src="@{/img/campesino.png}" alt="Familia Campesina" style="width: 100%; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.15);">
             </div>
             <div style="flex: 1; min-width: 300px;">
-                <h2 style="font-size: 2.5rem; color: var(--primary-dark);">Detrás de cada producto hay una familia</h2>
-                <p style="font-size: 1.1rem; color: #555; margin-bottom: 2rem;">
-                    En AgroConecta no solo compras alimentos, compras historias. Ayudas a que don José en Boyacá eduque a sus hijos, o a que doña María en Cundinamarca mejore su finca.
+                <h2 style="font-size: 2.5rem; color: #2e7d32; font-weight: 800;">Detrás de cada producto hay una familia</h2>
+                <p style="font-size: 1.15rem; color: #555; margin-bottom: 2rem; line-height: 1.8;">
+                    En AgroConecta no solo compras alimentos, compras historias. Ayudas a que don José en Boyacá eduque a sus hijos, o a que doña María en Cundinamarca mejore las herramientas de su finca. Con cada compra apoyas directamente el sustento de quienes labran nuestra tierra.
                 </p>
                 <div style="display: flex; gap: 3rem;">
                     <div>
-                        <h3 style="color: var(--primary); font-size: 3rem; margin: 0;">+500</h3>
-                        <p style="font-weight: 600; color: #666;">Campesinos</p>
+                        <h3 style="color: #4caf50; font-size: 3rem; margin: 0; font-weight: 800;">+500</h3>
+                        <p style="font-weight: 600; color: #666; text-transform: uppercase;">Familias Apoyadas</p>
                     </div>
                     <div>
-                        <h3 style="color: var(--accent); font-size: 3rem; margin: 0;">100%</h3>
-                        <p style="font-weight: 600; color: #666;">Colombiano</p>
+                        <h3 style="color: #f89820; font-size: 3rem; margin: 0; font-weight: 800;">100%</h3>
+                        <p style="font-weight: 600; color: #666; text-transform: uppercase;">Agro Colombiano</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="footer">
-        <div class="container animate-on-scroll">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 3rem; margin-bottom: 4rem;">
+    <footer class="footer" style="background-color: #1a1a1a; color: white; padding-top: 5rem;">
+        <div class="container fade-in-up">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 4rem; margin-bottom: 4rem;">
                 
                 <div>
                     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1.5rem;">
-                        <img src="/img/maiz.png" height="40" style="filter: brightness(0) invert(1); opacity: 0.9;" alt="Logo Footer">
-                        <h3 style="margin:0; color: white; font-size: 1.6rem; letter-spacing: 1px;">AGROCONECTA</h3>
+                        <i class="fa-solid fa-leaf" style="color: #4caf50; font-size: 2rem;"></i>
+                        <h3 style="margin:0; font-weight: 800; font-size: 1.6rem; letter-spacing: 1px;">AGROCONECTA</h3>
                     </div>
-                    <p style="opacity: 0.8; font-size: 0.95rem; line-height: 1.8; margin-bottom: 1.5rem;">
-                        Transformamos la cadena de suministro agrícola conectando corazones y cosechas. Una iniciativa para el desarrollo rural sostenible.
+                    <p style="color: #aaa; font-size: 0.95rem; line-height: 1.8; margin-bottom: 1.5rem;">
+                        Transformamos la cadena de suministro agrícola conectando corazones y cosechas. Un proyecto nacido en el SENA para toda Colombia.
                     </p>
                     <div>
-                        <a href="#" class="social-icon"><i class="fa-brands fa-facebook-f"></i></a>
-                        <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="#" class="social-icon"><i class="fa-brands fa-x-twitter"></i></a>
-                        <a href="#" class="social-icon"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a th:href="@{/simular-error}" class="social-icon"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a th:href="@{/simular-error}" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
                     </div>
                 </div>
 
                 <div class="footer-links">
-                    <h4>Explora</h4>
+                    <h4>Enlaces de Interés</h4>
                     <ul>
-                        <li><a href="/"><i class="fa-solid fa-chevron-right" style="font-size: 0.7rem; margin-right: 8px;"></i> Inicio</a></li>
-                        <li><a href="/catalogo"><i class="fa-solid fa-chevron-right" style="font-size: 0.7rem; margin-right: 8px;"></i> Mercado Campesino</a></li>
-                        <li><a href="/auth/register"><i class="fa-solid fa-chevron-right" style="font-size: 0.7rem; margin-right: 8px;"></i> Quiero Vender</a></li>
-                        <li><a href="/auth/login"><i class="fa-solid fa-chevron-right" style="font-size: 0.7rem; margin-right: 8px;"></i> Acceso Usuarios</a></li>
+                        <li><a href="https://oferta.senasofiaplus.edu.co/sofia-oferta/" target="_blank"><i class="fa-solid fa-graduation-cap" style="font-size: 0.7rem; margin-right: 8px;"></i> Ofertas Educativas SENA</a></li>
+                        <li><a href="https://www.minagricultura.gov.co/" target="_blank"><i class="fa-solid fa-landmark" style="font-size: 0.7rem; margin-right: 8px;"></i> Ministerio de Agricultura</a></li>
+                        <li><a th:href="@{/simular-error}"><i class="fa-solid fa-users" style="font-size: 0.7rem; margin-right: 8px;"></i> Sobre Nosotros</a></li>
+                        <li><a th:href="@{/simular-error}"><i class="fa-solid fa-envelope" style="font-size: 0.7rem; margin-right: 8px;"></i> Contáctanos</a></li>
                     </ul>
                 </div>
 
                 <div class="footer-links">
-                    <h4>Nosotros</h4>
-                    <ul>
-                        <li><a href="#"><i class="fa-solid fa-briefcase" style="font-size: 0.8rem; margin-right: 8px;"></i> Trabaja con nosotros</a></li>
-                        <li><a href="#"><i class="fa-solid fa-file-contract" style="font-size: 0.8rem; margin-right: 8px;"></i> Términos y Condiciones</a></li>
-                        <li><a href="#"><i class="fa-solid fa-shield-halved" style="font-size: 0.8rem; margin-right: 8px;"></i> Política de Privacidad</a></li>
-                        <li><a href="#"><i class="fa-solid fa-headset" style="font-size: 0.8rem; margin-right: 8px;"></i> Canal PQRS</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-links">
-                    <h4>Contáctanos</h4>
-                    <ul style="opacity: 0.9;">
-                        <li style="display: flex; gap: 10px; margin-bottom: 1rem;">
-                            <i class="fa-solid fa-location-dot" style="color: var(--accent); margin-top: 5px;"></i>
-                            <span>Calle 26 # 57-83, Bogotá D.C.<br>Edificio Torre Central</span>
+                    <h4>Equipo Fundador</h4>
+                    <ul style="color: #aaa;">
+                        <li style="display: flex; flex-direction: column; gap: 5px; margin-bottom: 1.5rem;">
+                            <strong style="color: white;"><i class="fa-solid fa-code" style="color: var(--accent);"></i> Thomas Calderón</strong>
+                            <span>Desarrollo y Arquitectura de Software</span>
+                            <a href="mailto:thomas.founder@agroconecta.com.co" style="color: #4caf50; font-size: 0.85rem;">thomas.founder@agroconecta.com.co</a>
                         </li>
-                        <li style="display: flex; gap: 10px; margin-bottom: 1rem;">
-                            <i class="fa-solid fa-phone" style="color: var(--accent); margin-top: 5px;"></i>
-                            <span>+57 (601) 321 4567<br>Línea Gratuita Nacional</span>
-                        </li>
-                        <li style="display: flex; gap: 10px;">
-                            <i class="fa-solid fa-envelope" style="color: var(--accent); margin-top: 5px;"></i>
-                            <span>contacto@agroconecta.com.co</span>
+                        <li style="display: flex; flex-direction: column; gap: 5px;">
+                            <strong style="color: white;"><i class="fa-solid fa-server" style="color: var(--accent);"></i> Brayan Bareño</strong>
+                            <span>Base de Datos y Operaciones</span>
+                            <a href="mailto:brayan.founder@agroconecta.com.co" style="color: #4caf50; font-size: 0.85rem;">brayan.founder@agroconecta.com.co</a>
                         </li>
                     </ul>
                 </div>
             </div>
 
-            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; text-align: center;">
-                <p style="font-size: 0.9rem; opacity: 0.6; margin-bottom: 1rem;">
-                    &copy; 2025 AgroConecta Colombia S.A.S. Todos los derechos reservados.
+            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding: 2rem 0; text-align: center; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+                <p style="font-size: 0.9rem; color: #666; margin: 0;">
+                    &copy; 2026 AgroConecta S.A.S. Proyecto Formativo SENA.
                 </p>
-                
-                <div style="opacity: 0.4; font-size: 0.8rem; font-family: monospace;">
-                    <span style="margin-right: 15px;">SISTEMA VERSIÓN 1.0.4</span>
-                    
-                    <a href="/simular-error" style="color: inherit; text-decoration: none; border-bottom: 1px dotted rgba(255,255,255,0.5); margin: 0 10px;" title="Probar manejo de excepciones">
-                        <i class="fa-solid fa-bug"></i> Test 500
-                    </a>
-                    
-                    <a href="/ruta-404-test" style="color: inherit; text-decoration: none; border-bottom: 1px dotted rgba(255,255,255,0.5); margin: 0 10px;" title="Probar página no encontrada">
-                        <i class="fa-solid fa-ban"></i> Test 404
+                <div style="color: #666; font-size: 0.8rem; display: flex; gap: 15px; align-items: center;">
+                    <a th:href="@{/simular-error}" style="color: #666; text-decoration: none; border-bottom: 1px dotted #666;" title="Simulación de Excepciones">
+                        <i class="fa-solid fa-bug"></i> Test Error 500
                     </a>
                 </div>
             </div>
@@ -209,9 +199,7 @@
                 }
             });
         }, { threshold: 0.1 });
-
-        document.querySelectorAll('.animate-on-scroll').forEach((el) => observer.observe(el));
+        document.querySelectorAll('.fade-in-up').forEach((el) => observer.observe(el));
     </script>
-
 </body>
 </html>

@@ -2,41 +2,70 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Detalle del Producto</title>
-    <link rel="stylesheet" th:href="@{/css/agroconecta.css}">
+    <title>Detalle de Cosecha - AgroConecta</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body { font-family: 'Montserrat', sans-serif; background-color: #f8f9fa; }
+        .product-img { width: 100%; height: 400px; object-fit: cover; border-radius: 15px; }
+        #map { height: 350px; border-radius: 15px; margin-top: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .card-buy { border: none; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+    </style>
 </head>
 <body>
-    <div class="header">
-        <a href="/catalogo" style="color:white;"><i class="fa-solid fa-arrow-left"></i> Volver al mercado</a>
-        <h2>Detalle</h2>
-        <div></div>
-    </div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" th:href="@{/catalogo}"><i class="fa-solid fa-arrow-left"></i> Volver al Catálogo</a>
+        </div>
+    </nav>
 
-    <div class="container animate-entry" style="margin-top:3rem;">
-        <div class="card-agro" style="display:flex; flex-wrap:wrap; gap:3rem; padding:0; overflow:hidden;">
-            <div style="flex:1; min-width:300px; background:#f5f5f5; display:flex; align-items:center; justify-content:center;">
-                <img th:src="@{'/img/' + ${producto.imagenUrl}}" style="max-width:100%; max-height:400px; object-fit:contain;">
+    <div class="container mt-5 mb-5" th:if="${producto != null}">
+        <div class="row g-5">
+            <div class="col-lg-6">
+                <img th:src="${producto.imagenUrl}" class="product-img" onerror="this.src='/img/campo-colombia.jpg'">
+                
+                <div id="map"></div>
             </div>
-            <div style="flex:1; min-width:300px; padding:2rem; display:flex; flex-direction:column; justify-content:center;">
-                <span class="btn-secondary" style="width:fit-content; padding:0.2rem 0.8rem; border-radius:20px; font-size:0.8rem; margin-bottom:1rem;" th:text="${producto.categoria}"></span>
-                
-                <h1 th:text="${producto.nombre}" style="font-size:2.5rem; color:var(--primary-dark); margin:0;"></h1>
-                <p style="color:#666; margin-bottom:1.5rem;"><i class="fa-solid fa-map-pin"></i> <span th:text="${producto.ubicacion}"></span></p>
-                
-                <p th:text="${producto.descripcion}" style="font-size:1.1rem; line-height:1.6; color:#444; margin-bottom:2rem;"></p>
-                
-                <div style="background:#f1f8e9; padding:1.5rem; border-radius:12px;">
-                    <div style="font-size:2rem; font-weight:800; color:var(--primary); margin-bottom:1rem;">
-                        $ <span th:text="${#numbers.formatDecimal(producto.precio, 0, 'POINT', 0, 'COMMA')}"></span> <span style="font-size:1rem; font-weight:normal;">COP</span>
-                    </div>
-                    <div style="display:flex; gap:1rem;">
-                        <input type="number" value="1" min="1" class="form-control" style="width:80px; margin:0; text-align:center;">
-                        <button class="btn-agro" style="flex:1;"><i class="fa-solid fa-cart-plus"></i> Añadir al Pedido</button>
-                    </div>
+            
+            <div class="col-lg-6">
+                <div class="card card-buy p-5">
+                    <span class="badge bg-success mb-2 w-fit" th:text="${producto.categoria}"></span>
+                    <h1 class="fw-bold text-dark mb-2" th:text="${producto.nombre}"></h1>
+                    
+                    <p class="text-muted" th:if="${producto.usuario != null}">
+                        <i class="fa-solid fa-user-tag text-success"></i> 
+                        Vendido por: <strong th:text="${producto.usuario.nombre}">Campesino</strong>
+                    </p>
+                    
+                    <p class="text-muted"><i class="fa-solid fa-location-dot text-danger"></i> <span th:text="${producto.ubicacion}">Ubicación</span></p>
+                    
+                    <h2 class="text-success fw-bold my-4" th:text="'$ ' + ${#numbers.formatDecimal(producto.precio, 0, 'COMMA', 0, 'POINT')}"></h2>
+                    
+                    <form th:action="@{/pedidos/comprar}" method="post">
+                        <input type="hidden" name="productoId" th:value="${producto.id}">
+                        <div class="mb-4">
+                            <label class="fw-bold mb-2">Cantidad a comprar:</label>
+                            <input type="number" name="cantidad" class="form-control form-control-lg bg-light" value="1" min="1" required>
+                        </div>
+                        <button type="submit" class="btn btn-warning btn-lg w-100 fw-bold rounded-pill py-3 shadow">
+                            <i class="fa-solid fa-credit-card"></i> Pagar Ahora
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script th:inline="javascript">
+        /* Usamos valores por defecto si la base de datos no tiene coordenadas */
+        var lat = /*[[${producto.latitud != null ? producto.latitud : 4.6097}]]*/ 4.6097;
+        var lng = /*[[${producto.longitud != null ? producto.longitud : -74.0817}]]*/ -74.0817;
+
+        var map = L.map('map').setView([lat, lng], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        L.marker([lat, lng]).addTo(map).bindPopup("<b>Ubicación de la Cosecha</b>").openPopup();
+    </script>
 </body>
 </html>
